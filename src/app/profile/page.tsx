@@ -2,8 +2,18 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import {
+  CheckCircle,
+  Crown,
   Edit3,
+  FileText,
+  Github,
+  Globe,
+  Linkedin,
   LogOut,
+  Mail,
+  Twitter,
+  User,
+  XCircle,
 } from "lucide-react"
 import { useAuth } from "../hooks/use-auth"
 
@@ -16,7 +26,7 @@ export default function ProfilePage() {
     setMounted(true)
   }, [])
 
-  useEffect(() => {
+  useEffect(() => {    
     if (mounted && !isLoading && !isAuthenticated) {
       router.push("/")
     }
@@ -33,7 +43,10 @@ export default function ProfilePage() {
     )
   } 
 
-
+   if (!user) {
+    return null
+  } 
+ 
   const handleLogout = () => {
     logout()
     router.push("/")
@@ -41,6 +54,28 @@ export default function ProfilePage() {
 
   const handleEditProfile = () => {
     router.push("/profile/edit")
+  }
+
+ const getInitials = (nombre?: string, apellido?: string) => {
+  const first = nombre?.charAt(0) || "?"
+  const last = apellido?.charAt(0) || "?"
+  return `${first}${last}`.toUpperCase()
+}
+
+
+  const getSocialIcon = (platform: string) => {
+    switch (platform) {
+      case "twitter":
+        return <Twitter className="h-4 w-4" />
+      case "linkedin":
+        return <Linkedin className="h-4 w-4" />
+      case "github":
+        return <Github className="h-4 w-4" />
+      case "sitio_web":
+        return <Globe className="h-4 w-4" />
+      default:
+        return null
+    }
   }
 
   return (
@@ -71,6 +106,146 @@ export default function ProfilePage() {
         </div>
       </header>
 
+        <main className="max-w-4xl mx-auto px-4 py-8">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="md:col-span-1">
+            <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+              <div className="flex flex-col items-center text-center space-y-4">
+                {/* Avatar */}
+                <div className="relative">
+                  <div className="h-24 w-24 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 p-1 shadow-lg">
+                    <div className="h-full w-full rounded-2xl bg-white flex items-center justify-center overflow-hidden">
+                      {user.foto ? (
+                        <img
+                          src={user.foto || "/placeholder.svg"}
+                          alt={`${user.user.first_name} ${user.user.last_name}`}
+                          className="h-full w-full object-cover rounded-2xl"
+                        />
+                      ) : (
+                        <span className="text-2xl font-bold text-emerald-600">
+                         {getInitials(user.user.first_name, user.user.last_name)}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Name and Type */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <h2 className="text-xl font-bold text-slate-800">
+                      {user.user.first_name} {user.user.last_name}
+                    </h2>
+                    {user.esta_verificado ? (
+                      <CheckCircle className="h-5 w-5 text-emerald-500" />
+                    ) : (
+                      <XCircle className="h-5 w-5 text-red-500" />
+                    )}
+                  </div>
+                  {user.tipo_usuario && (
+                    <div className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                      <Crown className="h-3 w-3" />
+                      {user.tipo_usuario}
+                    </div>
+                  )}
+                </div>
+
+                {/* Email */}
+                <div className="flex items-center gap-2 text-slate-600 bg-slate-50 px-4 py-2 rounded-xl">
+                  <Mail className="h-4 w-4" />
+                  <span className="text-sm font-medium">{user.correo}</span>
+                </div>
+              </div>
+            </div>
+
+
+            
+          </div>
+
+          <div className="md:col-span-2 space-y-6">
+            {/* Biography Card */}
+            {user.biografia && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <FileText className="h-5 w-5 text-emerald-600" />
+                  <h3 className="text-lg font-bold text-slate-800">Biografía</h3>
+                </div>
+                <p className="text-slate-700 leading-relaxed">{user.biografia}</p>
+              </div>
+            )}
+
+            {/* Personal Information Card */}
+            <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <User className="h-5 w-5 text-emerald-600" />
+                <h3 className="text-lg font-bold text-slate-800">Información Personal</h3>
+              </div>
+              <div className="space-y-4">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <label className="text-sm font-medium text-slate-600">Nombre</label>
+                    <p className="text-slate-800 font-semibold">{user.user.first_name}</p>
+                  </div>
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <label className="text-sm font-medium text-slate-600">Apellido</label>
+                    <p className="text-slate-800 font-semibold">{user.user.last_name}</p>
+                  </div>
+                </div>
+                <div className="bg-slate-50 p-4 rounded-xl">
+                  <label className="text-sm font-medium text-slate-600">Correo Electrónico</label>
+                  <p className="text-slate-800 font-semibold">{user.correo}</p>
+                </div>
+                {user.tipo_usuario && (
+                  <div className="bg-slate-50 p-4 rounded-xl">
+                    <label className="text-sm font-medium text-slate-600">Tipo de Usuario</label>
+                    <p className="text-slate-800 font-semibold">{user.tipo_usuario}</p>
+                  </div>
+                )}
+                <div className="bg-slate-50 p-4 rounded-xl">
+                  <label className="text-sm font-medium text-slate-600">Estado de Verificación</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    {user.esta_verificado ? (
+                      <>
+                        <CheckCircle className="h-4 w-4 text-emerald-500" />
+                        <span className="text-emerald-600 font-semibold">Verificado</span>
+                      </>
+                    ) : (
+                      <>
+                        <XCircle className="h-4 w-4 text-red-500" />
+                        <span className="text-red-600 font-semibold">No Verificado</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Social Networks Card */}
+            {user.redesSociales && Object.keys(user.redesSociales).length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Redes Sociales</h3>
+                <div className="space-y-3">
+                  {Object.entries(user.redesSociales).map(([platform, handle]) => {
+                    if (!handle) return null
+                    return (
+                      <div key={platform} className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl">
+                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg">
+                          {getSocialIcon(platform)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-600 capitalize">{platform}</p>
+                          <p className="text-slate-800 font-semibold">{handle}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </main>
     
     </div>
   )
