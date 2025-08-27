@@ -18,7 +18,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const isAuthenticated = !!user
-
+    
   const login = async (username: string, password: string) => {
     setIsLoading(true)
     try {
@@ -26,6 +26,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       localStorage.setItem("access_token", response.access)
       localStorage.setItem("refresh_token", response.refresh)
+
+      const profile = await apiService.getProfile()
+      setUser(profile)
 
       setIsLoading(false)
       return { success: true }
@@ -38,11 +41,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-    const logout = () => {
-        localStorage.removeItem("access_token")
-        localStorage.removeItem("refresh_token")
-        setUser(null)
-    }
+  const logout = () => {
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
+    setUser(null)
+  }
 
 
   return (

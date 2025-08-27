@@ -55,6 +55,15 @@ class ApiService {
     return this.handleResponse<LoginResponse>(response)
   }
 
+  async getProfile(): Promise<UserProfile> {
+    const response = await fetch(`${API_BASE_URL}/perfil/`, {
+      method: "GET",
+      headers: this.getAuthHeaders(),
+    })
+    return this.handleResponse<UserProfile>(response)
+  }
+
+
 }
 
 export const apiService = new ApiService()
