@@ -11,6 +11,24 @@ export interface LoginResponse {
 }
 
 
+export interface UserProfile {
+  user: {
+    first_name: string;
+    last_name: string;
+  };
+  telefono: string;
+  tipo_usuario: string;
+  tipo_naturaleza: string;
+  biografia: string;
+  documento: string;
+  linkedin: string;
+  twitter: string;
+  github: string;
+  sitio_web: string;
+  esta_verificado: string; 
+}
+
+
 class ApiService {
 
   private async handleResponse<T>(response: Response): Promise<T> {
