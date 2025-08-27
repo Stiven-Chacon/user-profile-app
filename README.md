@@ -38,11 +38,11 @@ git clone https://github.com/Stiven-Chacon/user-profile-app
 cd user-profile-app
 npm install
 npm run dev
-
+```
 ---
 
 ## 📂 Project Structure
-
+```bash
 USER-PROFILE-APP/
 ├── public/                # Static assets (images, icons, etc.)
 ├── src/
@@ -56,5 +56,5 @@ USER-PROFILE-APP/
 │   ├── hooks/             # Custom React hooks
 │   ├── lib/               # Utility functions/helpers
 │   └── services/          # API calls & authentication logic
-
-
+```
+---
