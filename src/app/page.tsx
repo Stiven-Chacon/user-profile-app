@@ -12,9 +12,14 @@ export default function Home() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   
-  const { login } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const router = useRouter()
 
+  // Redirect if already authenticated
+  if (isAuthenticated) {
+    router.push("/profile")
+    return null
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

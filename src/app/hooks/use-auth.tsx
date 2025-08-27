@@ -1,18 +1,22 @@
 "use client"
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
-import { apiService } from "../services/api"
+import { apiService, type UserProfile } from "../services/api"
 
 interface AuthContextType {
+  user: UserProfile | null
   isLoading: boolean
+  isAuthenticated: boolean
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<UserProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const isAuthenticated = !!user
 
   const login = async (username: string, password: string) => {
     setIsLoading(true)
@@ -38,7 +42,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   return (
     <AuthContext.Provider
       value={{
+        user,
         isLoading,
+        isAuthenticated,
         login,
       }}
     >
