@@ -12,7 +12,22 @@ export interface LoginResponse {
   refresh: string
 }
 
-
+export interface UpdateProfileRequest {
+  nombre?: string
+  apellido?: string
+  biografia?: string
+  telefono?: string
+  fecha_nacimiento?: string
+  genero?: string
+  pais?: string
+  ciudad?: string
+  direccion?: string
+  sitio_web?: string
+  linkedin?: string
+  twitter?: string
+  instagram?: string
+  facebook?: string
+}
 
 class ApiService {
   private getAuthHeaders(): HeadersInit {
@@ -44,6 +59,30 @@ class ApiService {
     const response = await fetch(`${API_BASE_URL}/perfil/`, {
       method: "GET",
       headers: this.getAuthHeaders(),
+    })
+    return this.handleResponse<UserProfile>(response)
+  }
+
+  async updateProfile(profileData: UpdateProfileRequest): Promise<UserProfile> {
+    const response = await fetch(`${API_BASE_URL}/usuario/perfil/`, {
+      method: "PUT",
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(profileData),
+    })
+    return this.handleResponse<UserProfile>(response)
+  }
+
+  async updateProfilePhoto(photoFile: File): Promise<UserProfile> {
+    const formData = new FormData()
+    formData.append("foto", photoFile)
+
+    const token = localStorage.getItem("access_token")
+    const response = await fetch(`${API_BASE_URL}/perfil/foto/`, {
+      method: "PATCH",
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+      body: formData,
     })
     return this.handleResponse<UserProfile>(response)
   }
