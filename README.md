@@ -35,7 +35,26 @@ The application integrates with a REST API secured with JWT authentication.
 ### 1. Clone the repository
 ```bash
 git clone https://github.com/Stiven-Chacon/user-profile-app
-cd nextjs-user-profile-app
+cd user-profile-app
 npm install
 npm run dev
+
+---
+
+## 📂 Project Structure
+
+USER-PROFILE-APP/
+├── public/                # Static assets (images, icons, etc.)
+├── src/
+│   ├── app/               # Next.js 13 App Router
+│   │   ├── profile/       # User profile routes
+│   │   │   ├── edit/      # Profile edit page
+│   │   │   └── page.tsx   # Profile view page
+│   │   ├── layout.tsx     # Main layout wrapper
+│   │   ├── page.tsx       # Login page
+│   │   └── globals.css    # Global styles (Tailwind CSS)
+│   ├── hooks/             # Custom React hooks
+│   ├── lib/               # Utility functions/helpers
+│   └── services/          # API calls & authentication logic
+
 
