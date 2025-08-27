@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect, createContext, useContext, type ReactNode } from "react"
-import { apiService, type UserProfile } from "../services/api"
+import { apiService } from "../services/api"
+import { mockUser, UserProfile } from "../lib/mock-data"
 
 interface AuthContextType {
   user: UserProfile | null
@@ -14,11 +15,11 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserProfile | null>(null)
+  const [user, setUser] = useState<UserProfile | null>(mockUser)
   const [isLoading, setIsLoading] = useState(true)
 
   const isAuthenticated = !!user
-
+    
   const login = async (username: string, password: string) => {
     setIsLoading(true)
     try {
@@ -26,6 +27,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       localStorage.setItem("access_token", response.access)
       localStorage.setItem("refresh_token", response.refresh)
+
+      const profile = await apiService.getProfile()
+      setUser(profile)
 
       setIsLoading(false)
       return { success: true }
@@ -38,11 +42,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }
 
-    const logout = () => {
-        localStorage.removeItem("access_token")
-        localStorage.removeItem("refresh_token")
-        setUser(null)
-    }
+  const logout = () => {
+    localStorage.removeItem("access_token")
+    localStorage.removeItem("refresh_token")
+    setUser(null)
+  }
 
 
   return (

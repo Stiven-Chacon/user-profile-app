@@ -1,3 +1,5 @@
+import { UserProfile } from "../lib/mock-data"
+
 const API_BASE_URL = "http://46.202.88.87:8010/usuarios/api"
 
 export interface LoginRequest {
@@ -10,23 +12,6 @@ export interface LoginResponse {
   refresh: string
 }
 
-
-export interface UserProfile {
-  user: {
-    first_name: string;
-    last_name: string;
-  };
-  telefono: string;
-  tipo_usuario: string;
-  tipo_naturaleza: string;
-  biografia: string;
-  documento: string;
-  linkedin: string;
-  twitter: string;
-  github: string;
-  sitio_web: string;
-  esta_verificado: string; 
-}
 
 
 class ApiService {
@@ -54,6 +39,15 @@ class ApiService {
     })
     return this.handleResponse<LoginResponse>(response)
   }
+
+    async getProfile(): Promise<UserProfile> {
+    const response = await fetch(`${API_BASE_URL}/perfil/`, {
+      method: "GET",
+      headers: this.getAuthHeaders(),
+    })
+    return this.handleResponse<UserProfile>(response)
+  }
+  
 
 }
 
