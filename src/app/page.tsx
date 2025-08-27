@@ -1,13 +1,36 @@
 "use client";
 import { useState } from "react";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
+import { useRouter } from "next/navigation"
+import { useAuth } from "./hooks/use-auth";
 
 export default function Home() {
 
-  const [email, setEmail] = useState("")
+  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  
+  const { login } = useAuth()
+  const router = useRouter()
 
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError("")
+    setIsLoading(true)
+
+    const result = await login(username, password)
+
+    if (result.success) {
+      router.push("/profile")
+    } else {
+      setError(result.error || "Error al iniciar sesión")
+    }
+
+    setIsLoading(false)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-emerald-100 flex items-center justify-center p-4">
@@ -27,20 +50,20 @@ export default function Home() {
             <p className="text-center text-slate-600 text-sm">Ingresa tus credenciales para acceder</p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-semibold text-slate-700">
-                Correo Electrónico
+              <label htmlFor="username" className="text-sm font-semibold text-slate-700">
+                Usuario
               </label>
               <div className="relative">
                 <User className="absolute left-4 top-1/2 transform -translate-y-1/2 text-emerald-500 h-5 w-5" />
                 <input
-                  id="email"
-                  type="email"
-                  placeholder="usuario@ejemplo.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                  id="username"
+                  type="text"
+                  placeholder="usuarioejemplo"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-black"
                   required
                 />
               </div>
@@ -58,7 +81,7 @@ export default function Home() {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 bg-white border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200"
+                  className="w-full pl-12 pr-12 py-3 bg-white border-2 border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-200 text-black"
                   required
                 />
                 <button
@@ -71,23 +94,37 @@ export default function Home() {
               </div>
             </div>
 
+            {error && (
+              <div className="flex items-center gap-3 p-4 bg-red-50 border border-red-200 rounded-xl">
+                <AlertCircle className="h-5 w-5 text-red-500 flex-shrink-0" />
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
+
             <button
               type="submit"
               className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg"
-            
+              disabled={isLoading}
             >
-              Iniciar Sesión
-            </button> 
+              {isLoading ? (
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Iniciando sesión...
+                </div>
+              ) : (
+                "Iniciar Sesión"
+              )}
+            </button>
           </form>
 
           <div className="mt-8 p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
             <p className="text-sm text-emerald-700 text-center mb-3 font-semibold">Credenciales de prueba:</p>
             <div className="text-sm text-center space-y-2">
               <div className="bg-white px-3 py-2 rounded-lg border border-emerald-200">
-                <p className="font-mono text-slate-700">ana.garcia@email.com</p>
+                <p className="font-mono text-slate-700">carlosandresmoreno</p>
               </div>
               <div className="bg-white px-3 py-2 rounded-lg border border-emerald-200">
-                <p className="font-mono text-slate-700">123456</p>
+                <p className="font-mono text-slate-700">90122856_Hanz</p>
               </div>
             </div>
           </div>
