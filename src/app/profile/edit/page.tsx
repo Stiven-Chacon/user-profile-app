@@ -120,7 +120,6 @@ export default function EditProfilePage() {
         try {
             await apiService.updateProfilePhoto(photoFile)
             await refreshProfile()
-            await apiService.getProfile()
             setMessage({ type: "success", text: "Foto actualizada exitosamente" })
             setPhotoFile(null)
             setPhotoPreview(null)
@@ -142,6 +141,7 @@ export default function EditProfilePage() {
             await apiService.updateProfile(formData)
             await refreshProfile()
             setMessage({ type: "success", text: "Perfil actualizado exitosamente" })
+            await apiService.getProfile()
             setTimeout(() => {
                 router.push("/profile")
             }, 2000)
