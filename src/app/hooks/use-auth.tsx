@@ -21,7 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   const isAuthenticated = !!user
-
+  
    useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem("access_token")
@@ -46,9 +46,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(true)
     try {
       const response = await apiService.login({ username, password })
-
-      localStorage.setItem("access_token", response.access)
-      localStorage.setItem("refresh_token", response.refresh)
+      
+      localStorage.setItem("access_token", response.data.access)
+      localStorage.setItem("refresh_token", response.data.refresh)
 
       const profile = await apiService.getProfile()
       setUser(profile)

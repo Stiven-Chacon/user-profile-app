@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Lock, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation"
 import { useAuth } from "./hooks/use-auth";
@@ -15,11 +15,12 @@ export default function Home() {
   const { login, isAuthenticated } = useAuth()
   const router = useRouter()
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    router.push("/profile")
-    return null
-  }
+  // Redirect if already authenticated  
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/profile")
+    }
+  }, [isAuthenticated, router])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
