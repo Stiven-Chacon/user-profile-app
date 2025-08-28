@@ -8,8 +8,10 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  access: string
-  refresh: string
+  data: {
+    access: string
+    refresh: string
+  }
 }
 
 export interface UpdateProfileRequest {
@@ -59,8 +61,9 @@ class ApiService {
     const response = await fetch(`${API_BASE_URL}/perfil/`, {
       method: "GET",
       headers: this.getAuthHeaders(),
-    })
-    return this.handleResponse<UserProfile>(response)
+    })    
+    const result = await this.handleResponse<{ data: UserProfile }>(response)
+    return result.data
   }
 
   async updateProfile(profileData: UpdateProfileRequest): Promise<UserProfile> {
