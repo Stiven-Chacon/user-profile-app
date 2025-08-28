@@ -15,7 +15,6 @@ interface FormData {
     biografia: string
     telefono: string
     tipo_usuario: string
-    tipo_naturaleza: string
     documento: string
     esta_verificado: string
     sitio_web: string
@@ -36,7 +35,6 @@ export default function EditProfilePage() {
         biografia: "",
         telefono: "",
         tipo_usuario: "",
-        tipo_naturaleza: "",
         documento: "",
         esta_verificado: "",
         sitio_web: "",
@@ -63,19 +61,18 @@ export default function EditProfilePage() {
     useEffect(() => {
         if (user) {
             setFormData({
-                first_name: user.user.first_name || "",
-                last_name: user.user.last_name || "",
-                correo: user.correo || "",
-                biografia: user.biografia || "",
-                telefono: user.telefono || "",
+                first_name: user.basic_info.first_name || "",
+                last_name: user.basic_info.last_name || "",
+                correo: user.basic_info.email || "",
+                biografia: user.basic_info.biografia || "",
+                telefono: user.basic_info.telefono || "",
                 tipo_usuario: user.tipo_usuario || "",
-                tipo_naturaleza: user.tipo_naturaleza || "",
-                documento: user.documento || "",
+                documento: user.basic_info.documento || "",
                 esta_verificado: formData.esta_verificado ? "true" : "false",
-                sitio_web: user.redesSociales.sitio_web || "",
-                linkedin: user.redesSociales.linkedin || "",
-                twitter: user.redesSociales.twitter || "",
-                github: user.redesSociales.github || "",
+                sitio_web: user.basic_info.redes_sociales.sitio_web || "",
+                linkedin: user.basic_info.redes_sociales.linkedin || "",
+                twitter: user.basic_info.redes_sociales.twitter || "",
+                github: user.basic_info.redes_sociales.github || "",
             })
         }
     }, [user])
@@ -123,6 +120,7 @@ export default function EditProfilePage() {
         try {
             await apiService.updateProfilePhoto(photoFile)
             await refreshProfile()
+            await apiService.getProfile()
             setMessage({ type: "success", text: "Foto actualizada exitosamente" })
             setPhotoFile(null)
             setPhotoPreview(null)
@@ -197,8 +195,8 @@ export default function EditProfilePage() {
                                 <div className="relative">
                                     <div className="h-20 w-20 rounded-full overflow-hidden border-4 border-primary/20">
                                         <img
-                                            src={photoPreview || user.foto || "/placeholder.svg?height=80&width=80"}
-                                            alt={`${user.user.first_name} ${user.user.last_name}`}
+                                            src={photoPreview || user.basic_info.foto || "/placeholder.svg?height=80&width=80"}
+                                            alt={`${user.basic_info.first_name} ${user.basic_info.last_name}`}
                                             className="h-full w-full object-cover"
                                         />
                                     </div>
