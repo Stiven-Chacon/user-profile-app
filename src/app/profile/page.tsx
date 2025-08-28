@@ -22,11 +22,11 @@ export default function ProfilePage() {
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {    
+  useEffect(() => {
     setMounted(true)
   }, [])
 
-  useEffect(() => {    
+  useEffect(() => {
     if (mounted && !isLoading && !isAuthenticated) {
       router.push("/")
     }
@@ -41,12 +41,12 @@ export default function ProfilePage() {
         </div>
       </div>
     )
-  } 
+  }
 
-   if (!user) {
+  if (!user) {
     return null
-  } 
- 
+  }
+
   const handleLogout = () => {
     logout()
     router.push("/")
@@ -56,11 +56,11 @@ export default function ProfilePage() {
     router.push("/profile/edit")
   }
 
- const getInitials = (nombre?: string, apellido?: string) => {
-  const first = nombre?.charAt(0) || "?"
-  const last = apellido?.charAt(0) || "?"
-  return `${first}${last}`.toUpperCase()
-}
+  const getInitials = (nombre?: string, apellido?: string) => {
+    const first = nombre?.charAt(0) || "?"
+    const last = apellido?.charAt(0) || "?"
+    return `${first}${last}`.toUpperCase()
+  }
 
 
   const getSocialIcon = (platform: string) => {
@@ -106,7 +106,7 @@ export default function ProfilePage() {
         </div>
       </header>
 
-        <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="grid gap-6 md:grid-cols-3">
           <div className="md:col-span-1">
             <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
@@ -115,15 +115,15 @@ export default function ProfilePage() {
                 <div className="relative">
                   <div className="h-24 w-24 rounded-2xl bg-gradient-to-r from-emerald-500 to-emerald-600 p-1 shadow-lg">
                     <div className="h-full w-full rounded-2xl bg-white flex items-center justify-center overflow-hidden">
-                      {user.foto ? (
+                      {user.basic_info.foto ? (
                         <img
-                          src={user.foto || "/placeholder.svg"}
-                          alt={`${user.user.first_name} ${user.user.last_name}`}
+                          src={user.basic_info.foto || "/placeholder.svg"}
+                          alt={`${user.basic_info.first_name} ${user.basic_info.last_name}`}
                           className="h-full w-full object-cover rounded-2xl"
                         />
                       ) : (
                         <span className="text-2xl font-bold text-emerald-600">
-                         {getInitials(user.user.first_name, user.user.last_name)}
+                          {getInitials(user.basic_info.first_name, user.basic_info.last_name)}
                         </span>
                       )}
                     </div>
@@ -134,7 +134,7 @@ export default function ProfilePage() {
                 <div className="space-y-2">
                   <div className="flex items-center justify-center gap-2">
                     <h2 className="text-xl font-bold text-slate-800">
-                      {user.user.first_name} {user.user.last_name}
+                      {user.basic_info.first_name} {user.basic_info.last_name}
                     </h2>
                     {user.esta_verificado ? (
                       <CheckCircle className="h-5 w-5 text-emerald-500" />
@@ -153,24 +153,24 @@ export default function ProfilePage() {
                 {/* Email */}
                 <div className="flex items-center gap-2 text-slate-600 bg-slate-50 px-4 py-2 rounded-xl">
                   <Mail className="h-4 w-4" />
-                  <span className="text-sm font-medium">{user.correo}</span>
+                  <span className="text-sm font-medium">{user.basic_info.email}</span>
                 </div>
               </div>
             </div>
 
 
-            
+
           </div>
 
           <div className="md:col-span-2 space-y-6">
             {/* Biography Card */}
-            {user.biografia && (
+            {user.basic_info.biografia && (
               <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FileText className="h-5 w-5 text-emerald-600" />
                   <h3 className="text-lg font-bold text-slate-800">Biografía</h3>
                 </div>
-                <p className="text-slate-700 leading-relaxed">{user.biografia}</p>
+                <p className="text-slate-700 leading-relaxed">{user.basic_info.biografia}</p>
               </div>
             )}
 
@@ -184,16 +184,16 @@ export default function ProfilePage() {
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="bg-slate-50 p-4 rounded-xl">
                     <label className="text-sm font-medium text-slate-600">Nombre</label>
-                    <p className="text-slate-800 font-semibold">{user.user.first_name}</p>
+                    <p className="text-slate-800 font-semibold">{user.basic_info.first_name}</p>
                   </div>
                   <div className="bg-slate-50 p-4 rounded-xl">
                     <label className="text-sm font-medium text-slate-600">Apellido</label>
-                    <p className="text-slate-800 font-semibold">{user.user.last_name}</p>
+                    <p className="text-slate-800 font-semibold">{user.basic_info.last_name}</p>
                   </div>
                 </div>
                 <div className="bg-slate-50 p-4 rounded-xl">
                   <label className="text-sm font-medium text-slate-600">Correo Electrónico</label>
-                  <p className="text-slate-800 font-semibold">{user.correo}</p>
+                  <p className="text-slate-800 font-semibold">{user.basic_info.email}</p>
                 </div>
                 {user.tipo_usuario && (
                   <div className="bg-slate-50 p-4 rounded-xl">
@@ -221,11 +221,11 @@ export default function ProfilePage() {
             </div>
 
             {/* Social Networks Card */}
-            {user.redesSociales && Object.keys(user.redesSociales).length > 0 && (
+            {user.basic_info.redes_sociales && Object.keys(user.basic_info.redes_sociales).length > 0 && (
               <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
                 <h3 className="text-lg font-bold text-slate-800 mb-4">Redes Sociales</h3>
                 <div className="space-y-3">
-                  {Object.entries(user.redesSociales).map(([platform, handle]) => {
+                  {Object.entries(user.basic_info.redes_sociales).map(([platform, handle]) => {
                     if (!handle) return null
                     return (
                       <div key={platform} className="flex items-center gap-3 bg-slate-50 p-4 rounded-xl">
@@ -243,10 +243,102 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {/* Educación Card */}
+            {user.educacion && user.educacion.length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Educación</h3>
+                <div className="space-y-4">
+                  {user.educacion.map((edu) => (
+                    <div key={edu.id} className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-slate-800 font-semibold">{edu.titulo}</p>
+                      <p className="text-sm text-slate-600">{edu.institucion}</p>
+                      <p className="text-xs text-slate-500">
+                        {edu.fecha_inicio} - {edu.fecha_fin ?? "Presente"}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Experiencia Laboral Card */}
+            {user.experiencia_laboral && user.experiencia_laboral.length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Experiencia Laboral</h3>
+                <div className="space-y-4">
+                  {user.experiencia_laboral.map((exp) => (
+                    <div key={exp.id} className="bg-slate-50 p-4 rounded-xl">
+                      <p className="text-slate-800 font-semibold">{exp.posicion}</p>
+                      <p className="text-sm text-slate-600">{exp.empresa}</p>
+                      <p className="text-xs text-slate-500">
+                        {exp.fecha_inicio} - {exp.actualmente ? "Actualidad" : exp.fecha_fin}
+                      </p>
+                      <p className="text-sm text-slate-700 mt-2">{exp.funciones}</p>
+                      {exp.habilidades && exp.habilidades.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {exp.habilidades.map((h) => (
+                            <span
+                              key={h.id}
+                              className="px-3 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full"
+                            >
+                              {h.nombre}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Habilidades Card */}
+            {user.habilidades && user.habilidades.length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Habilidades</h3>
+                <div className="flex flex-wrap gap-3">
+                  {user.habilidades.map((skill) => (
+                    <div
+                      key={skill.id}
+                      className="px-4 py-2 bg-emerald-50 text-emerald-700 font-medium rounded-xl shadow-sm"
+                    >
+                      {skill.habilidad__nombre} ({skill.tiempo_experiencia} años)
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Portafolio Card */}
+            {user.portafolio && user.portafolio.length > 0 && (
+              <div className="bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-2xl shadow-xl p-6">
+                <h3 className="text-lg font-bold text-slate-800 mb-4">Portafolio</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {user.portafolio.map((item) => (
+                    <div key={item.id} className="bg-slate-50 p-4 rounded-xl shadow-sm">
+                      <p className="text-slate-800 font-semibold">{item.titulo}</p>
+                      <p className="text-sm text-slate-600">{item.descripcion}</p>
+                      {item.url && (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-emerald-600 text-sm mt-2 inline-block"
+                        >
+                          Ver Proyecto
+                        </a>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+
           </div>
         </div>
       </main>
-    
+
     </div>
   )
 }
